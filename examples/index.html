@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Markdown Stream Demo</title>
+    <style>
+      body { font-family: system-ui, sans-serif; margin: 0; padding: 24px; display: grid; gap: 16px; grid-template-columns: 1fr 1fr; height: 100vh; box-sizing: border-box; }
+      textarea { width: 100%; height: 100%; padding: 12px; font-size: 14px; }
+      .preview { border: 1px solid #ddd; padding: 12px; overflow: auto; }
+      h1, h2, h3 { margin-top: 0; }
+    </style>
+  </head>
+  <body>
+    <div>
+      <h2>输入</h2>
+      <textarea id="md-input"># Hello
+
+- 支持流式写入
+- 自动清洗HTML
+
+**加粗** 和 _斜体_
+
+`代码块`
+
+```js
+console.log('hi')
+```
+
+内联公式示例：\(e^{i\pi}+1=0\)，\(x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}\)，\(\vec{a}\cdot\vec{b}=a_xb_x+a_yb_y+a_zb_z\)。
+
+块级公式示例：
+\[
+F(\omega)=\dint_{-\infty}^{\infty} f(t) e^{-i\omega t} \dd t
+\]
+
+\[
+\mat{a & b \\ c & d}\,\mat{x \\ y}=\mat{ax+by \\ cx+dy}
+\]
+
+\\[
+f(x)=\sum_{n=0}^{\infty}\frac{f^{(n)}(a)}{n!}(x-a)^n
+\\]
+
+\\[
+\nabla^2 u=\frac{\partial^2 u}{\partial x^2}+\frac{\partial^2 u}{\partial y^2}+\frac{\partial^2 u}{\partial z^2}=0
+\\]
+
+\\[
+f(x)=\frac{1}{\sqrt{2\pi\sigma^2}}e^{-\frac{(x-\mu)^2}{2\sigma^2}}
+\\]
+
+HTML 示例：
+<div>
+  <u>下划线</u> 与 <mark>高亮</mark>，以及 <a href="https://example.com" target="_blank" rel="noopener">链接</a>
+</div>
+      </textarea>
+    </div>
+    <div>
+      <h2>预览</h2>
+      <div id="preview" class="preview"></div>
+    </div>
+    <script src="../dist/markdown-stream.js"></script>
+    <script>
+      const previewEl = document.getElementById('preview')
+      const inputEl = document.getElementById('md-input')
+      const Renderer = (window.MarkdownStreamRenderer && window.MarkdownStreamRenderer.default) || window.MarkdownStreamRenderer
+      const renderer = new Renderer({
+        mathSyntax: { brackets: true, dollars: true },
+        allowHtml: true,
+        throttleMs: 50,
+        useMath: true,
+        katexOptions: { throwOnError: false, fleqn: true },
+        respectNewlines: true,
+        cssOverrides: {
+          'h2': { 'font-weight': '700', 'font-size': '18px' },
+          '.preview p': { 'margin': '6px 0' },
+          'code': { 'background': '#f6f8fa', 'padding': '2px 4px', 'border-radius': '4px' },
+          'pre code': { 'display': 'block', 'padding': '10px' }
+        },
+        selectorClassMap: {
+          'h2': ['md-heading'],
+          'pre code': ['md-codeblock']
+        }
+      })
+      renderer.renderTo(previewEl)
+      renderer.clear()
+      renderer.write(inputEl.value)
+      renderer.flush()
+      inputEl.addEventListener('input', (e) => {
+        renderer.clear()
+        renderer.write(e.target.value)
+      })
+    </script>
+  </body>
+  </html>

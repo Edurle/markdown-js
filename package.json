@@ -1,0 +1,24 @@
+{
+  "name": "markdown_render",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "esbuild src/index.js --bundle --minify --format=iife --global-name=MarkdownStreamRenderer --loader:.css=text --loader:.woff2=dataurl --loader:.woff=dataurl --loader:.ttf=dataurl --outfile=dist/markdown-stream.js",
+    "preview": "serve . -l 5173",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "dompurify": "^3.3.0",
+    "katex": "^0.16.25",
+    "micromark": "^4.0.2",
+    "micromark-extension-math": "^3.1.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.27.0",
+    "serve": "^14.2.5"
+  }
+}
