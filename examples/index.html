@@ -81,15 +81,14 @@ HTML 示例：
         selectorClassMap: {
           'h2': ['md-heading'],
           'pre code': ['md-codeblock']
-        }
+        },
+        typewriter: { enabled: true, intervalMs: 24, step: 2 }
       })
       renderer.renderTo(previewEl)
       renderer.clear()
       renderer.write(inputEl.value)
-      renderer.flush()
       inputEl.addEventListener('input', (e) => {
-        renderer.clear()
-        renderer.write(e.target.value)
+        renderer.update(e.target.value)
       })
     </script>
   </body>
